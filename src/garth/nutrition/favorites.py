@@ -41,3 +41,53 @@ class FavoriteFoods:
             FavoriteFood(**camel_to_snake_dict(c))
             for c in data.get("consumables", [])
         ]
+
+    @staticmethod
+    def add(
+        food_id: str,
+        serving_id: str,
+        source: str,
+        serving_qty: float = 1,
+        region_code: str | None = None,
+        language_code: str | None = None,
+        *,
+        client: http.Client | None = None,
+    ) -> None:
+        import garth
+        from garth.nutrition.food_log import _resolve_locale
+
+        client = client or garth.client
+        r_region, r_lang = _resolve_locale(
+            region_code, language_code, None, client
+        )
+        body: dict = {
+            "foodId": food_id,
+            "servingId": serving_id,
+            "source": source,
+            "servingQty": serving_qty,
+        }
+        if r_region is not None:
+            body["regionCode"] = r_region
+        if r_lang is not None:
+            body["languageCode"] = r_lang
+        client.put(
+            "connectapi",
+            "/nutrition-service/favorite/food",
+            api=True,
+            json=body,
+        )
+
+    @staticmethod
+    def remove(
+        food_id: str,
+        *,
+        client: http.Client | None = None,
+    ) -> None:
+        import garth
+
+        client = client or garth.client
+        client.delete(
+            "connectapi",
+            f"/nutrition-service/favorite/food/{food_id}",
+            api=True,
+        )
