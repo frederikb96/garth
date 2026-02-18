@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock, patch
+
 from garth.nutrition import CustomFood, CustomFoodItem, CustomFoodList
 from garth.utils import camel_to_snake_dict
 
@@ -63,3 +65,32 @@ def test_has_methods():
     assert callable(CustomFood.create)
     assert callable(CustomFood.update)
     assert callable(CustomFood.delete)
+
+
+@patch("garth.nutrition.food_log._resolve_locale", return_value=("US", "en"))
+def test_create_payload_sends_numeric_values(_mock_locale):
+    mock_client = MagicMock()
+    mock_client.connectapi.return_value = {
+        "foodMetaData": {"foodName": "Test", "foodId": "123"},
+        "nutritionContents": [{"calories": 200.0}],
+        "foodImages": [],
+        "isFavorite": False,
+    }
+    CustomFood.create(
+        food_name="Test",
+        serving_unit="g",
+        number_of_units=100.0,
+        calories=200.0,
+        protein=10.5,
+        fat=5.0,
+        carbs=30.0,
+        client=mock_client,
+    )
+    body = mock_client.connectapi.call_args.kwargs["json"]
+    nutrition = body["nutritionContents"][0]
+    assert isinstance(nutrition["numberOfUnits"], float)
+    assert isinstance(nutrition["calories"], float)
+    assert isinstance(nutrition["protein"], float)
+    assert isinstance(nutrition["fat"], float)
+    assert isinstance(nutrition["carbs"], float)
+    assert nutrition["fiber"] is None

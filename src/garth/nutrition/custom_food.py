@@ -238,32 +238,29 @@ class CustomFood:
             region_code, language_code, None, client
         )
 
-        def _str_or_none(v: float | None) -> str | None:
-            return str(v) if v is not None else None
-
         nutrition: dict = {
             "servingId": serving_id,
             "servingUnit": serving_unit.upper(),
-            "numberOfUnits": str(number_of_units),
-            "calories": str(calories),
-            "protein": _str_or_none(protein),
-            "fat": _str_or_none(fat),
-            "carbs": _str_or_none(carbs),
-            "fiber": _str_or_none(fiber),
-            "sugar": _str_or_none(sugar),
-            "addedSugars": _str_or_none(added_sugars),
-            "saturatedFat": _str_or_none(saturated_fat),
-            "monounsaturatedFat": _str_or_none(monounsaturated_fat),
-            "polyunsaturatedFat": _str_or_none(polyunsaturated_fat),
-            "transFat": _str_or_none(trans_fat),
-            "cholesterol": _str_or_none(cholesterol),
-            "sodium": _str_or_none(sodium),
-            "potassium": _str_or_none(potassium),
-            "vitaminA": _str_or_none(vitamin_a),
-            "vitaminC": _str_or_none(vitamin_c),
-            "vitaminD": _str_or_none(vitamin_d),
-            "calcium": _str_or_none(calcium),
-            "iron": _str_or_none(iron),
+            "numberOfUnits": number_of_units,
+            "calories": calories,
+            "protein": protein,
+            "fat": fat,
+            "carbs": carbs,
+            "fiber": fiber,
+            "sugar": sugar,
+            "addedSugars": added_sugars,
+            "saturatedFat": saturated_fat,
+            "monounsaturatedFat": monounsaturated_fat,
+            "polyunsaturatedFat": polyunsaturated_fat,
+            "transFat": trans_fat,
+            "cholesterol": cholesterol,
+            "sodium": sodium,
+            "potassium": potassium,
+            "vitaminA": vitamin_a,
+            "vitaminC": vitamin_c,
+            "vitaminD": vitamin_d,
+            "calcium": calcium,
+            "iron": iron,
         }
         meta: dict = {
             "foodId": food_id,
