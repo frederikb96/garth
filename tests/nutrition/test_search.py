@@ -78,6 +78,14 @@ def test_recent_foods_construction():
     assert recent.recent_foods[0].food_meta_data.food_name == "Toast"
 
 
+def test_recent_meal_id_required():
+    import inspect
+
+    sig = inspect.signature(FoodSearch.recent)
+    param = sig.parameters["meal_id"]
+    assert param.default is inspect.Parameter.empty
+
+
 def test_has_search_methods():
     assert hasattr(FoodSearch, "search")
     assert hasattr(FoodSearch, "autocomplete")

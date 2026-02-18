@@ -1,4 +1,4 @@
-from garth.nutrition import FavoriteFood, FavoriteFoods
+from garth.nutrition import FavoriteFood, FavoriteFoodList, FavoriteFoods
 from garth.utils import camel_to_snake_dict
 
 
@@ -28,6 +28,24 @@ def test_favorite_food_construction():
     assert fav.food_meta_data is not None
     assert fav.food_meta_data.food_name == "Oatmeal"
     assert fav.is_favorite is True
+
+
+def test_favorite_food_list_construction():
+    fav = FavoriteFood(
+        food_meta_data=None,
+        nutrition_contents=[],
+        food_images=[],
+        is_favorite=True,
+    )
+    result = FavoriteFoodList(items=[fav], has_more=True)
+    assert len(result.items) == 1
+    assert result.has_more is True
+
+
+def test_favorite_food_list_defaults():
+    result = FavoriteFoodList()
+    assert result.items == []
+    assert result.has_more is False
 
 
 def test_has_methods():

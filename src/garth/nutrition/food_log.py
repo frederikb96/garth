@@ -1,18 +1,12 @@
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
+from datetime import date
 from typing import Any
 
 from garth import http
+from garth.nutrition._utils import _now_iso
 from garth.nutrition.daily_log import DailyNutritionLog
 from garth.utils import camel_to_snake_dict, format_end_date
-
-
-def _now_iso() -> str:
-    now = datetime.now(timezone.utc)
-    return (
-        now.strftime("%Y-%m-%dT%H:%M:%S.") + f"{now.microsecond // 1000:03d}Z"
-    )
 
 
 def _resolve_meal_time(
@@ -181,6 +175,7 @@ class FoodLog:
         to_date: date | str,
         log_id: str,
         meal_time: str,
+        log_category: str = "REGULAR_LOG",
         *,
         client: http.Client | None = None,
     ) -> None:
@@ -196,7 +191,7 @@ class FoodLog:
                     "logId": log_id,
                     "logTimestamp": _now_iso(),
                     "logSource": "GCW",
-                    "logCategory": "REGULAR_LOG",
+                    "logCategory": log_category,
                     "mealTime": meal_time,
                 },
             ],
@@ -213,6 +208,7 @@ class FoodLog:
         to_dates: date | str | list[date | str],
         log_id: str,
         meal_time: str,
+        log_category: str = "REGULAR_LOG",
         *,
         client: http.Client | None = None,
     ) -> None:
@@ -230,7 +226,7 @@ class FoodLog:
                     "logId": log_id,
                     "logTimestamp": _now_iso(),
                     "logSource": "GCW",
-                    "logCategory": "REGULAR_LOG",
+                    "logCategory": log_category,
                     "mealTime": meal_time,
                 },
             ],

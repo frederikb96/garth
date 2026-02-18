@@ -7,10 +7,15 @@ from ._types import (
     MealDetail,
     NutritionContent,
 )
-from .custom_food import CustomFood, CustomFoodItem
-from .custom_meal import CustomMeal, CustomMealItem
+from .custom_food import CustomFood, CustomFoodItem, CustomFoodList
+from .custom_meal import (
+    CustomMeal,
+    CustomMealDetail,
+    CustomMealItem,
+    CustomMealList,
+)
 from .daily_log import DailyNutritionLog
-from .favorites import FavoriteFood, FavoriteFoods
+from .favorites import FavoriteFood, FavoriteFoodList, FavoriteFoods
 from .food_log import FoodLog
 from .meals import MealDefinitions
 from .quick_add import QuickAdd
@@ -22,11 +27,15 @@ from .status import NutritionStatus
 __all__ = [
     "CustomFood",
     "CustomFoodItem",
+    "CustomFoodList",
     "CustomMeal",
+    "CustomMealDetail",
     "CustomMealItem",
+    "CustomMealList",
     "DailyNutritionLog",
     "DailyNutritionSummary",
     "FavoriteFood",
+    "FavoriteFoodList",
     "FavoriteFoods",
     "FoodLog",
     "FoodMetaData",

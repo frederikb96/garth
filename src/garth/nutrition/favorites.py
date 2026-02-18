@@ -17,6 +17,12 @@ class FavoriteFood:
     is_favorite: bool | None = None
 
 
+@dataclass
+class FavoriteFoodList:
+    items: list[FavoriteFood] = field(default_factory=list)
+    has_more: bool = False
+
+
 class FavoriteFoods:
     @staticmethod
     def list(
@@ -25,7 +31,7 @@ class FavoriteFoods:
         limit: int = 50,
         *,
         client: http.Client | None = None,
-    ) -> list[FavoriteFood]:
+    ) -> FavoriteFoodList:
         import garth
 
         client = client or garth.client
@@ -37,10 +43,14 @@ class FavoriteFoods:
         }
         data = client.connectapi("/nutrition-service/favorite", params=params)
         assert isinstance(data, dict)
-        return [
+        items = [
             FavoriteFood(**camel_to_snake_dict(c))
             for c in data.get("consumables", [])
         ]
+        return FavoriteFoodList(
+            items=items,
+            has_more=data.get("hasMore", False),
+        )
 
     @staticmethod
     def add(

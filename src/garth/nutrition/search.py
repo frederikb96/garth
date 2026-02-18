@@ -85,8 +85,8 @@ class FoodSearch:
 
     @staticmethod
     def recent(
+        meal_id: int,
         day: date | str | None = None,
-        meal_id: int = 0,
         start: int = 0,
         limit: int = 50,
         *,

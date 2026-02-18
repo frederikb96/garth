@@ -1,4 +1,4 @@
-from garth.nutrition import CustomFood, CustomFoodItem
+from garth.nutrition import CustomFood, CustomFoodItem, CustomFoodList
 from garth.utils import camel_to_snake_dict
 
 
@@ -34,6 +34,24 @@ def test_custom_food_item_construction():
     assert item.food_meta_data.food_name == "My Protein Bar"
     assert len(item.nutrition_contents) == 1
     assert item.nutrition_contents[0].protein == 20.0
+
+
+def test_custom_food_list_construction():
+    item = CustomFoodItem(
+        food_meta_data=None,
+        nutrition_contents=[],
+        food_images=[],
+        is_favorite=False,
+    )
+    result = CustomFoodList(items=[item], more_data_available=True)
+    assert len(result.items) == 1
+    assert result.more_data_available is True
+
+
+def test_custom_food_list_defaults():
+    result = CustomFoodList()
+    assert result.items == []
+    assert result.more_data_available is False
 
 
 def test_has_methods():

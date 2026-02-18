@@ -1,18 +1,12 @@
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
+from datetime import date
 
 from garth import http
+from garth.nutrition._utils import _now_iso
 from garth.nutrition.daily_log import DailyNutritionLog
 from garth.nutrition.food_log import _resolve_meal_time
 from garth.utils import camel_to_snake_dict, format_end_date
-
-
-def _now_iso() -> str:
-    now = datetime.now(timezone.utc)
-    return (
-        now.strftime("%Y-%m-%dT%H:%M:%S.") + f"{now.microsecond // 1000:03d}Z"
-    )
 
 
 class QuickAdd:

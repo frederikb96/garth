@@ -19,6 +19,36 @@ class CustomMealItem:
     is_favorite: bool | None = None
 
 
+@dataclass
+class CustomMealList:
+    items: list[CustomMealItem] = field(default_factory=list)
+    has_more: bool = False
+
+
+@dataclass
+class CustomMealFood:
+    id: str | None = None
+    food_meta_data: FoodMetaData | None = None
+    food_images: list[dict] = field(default_factory=list)
+    nutrition_contents: list[NutritionContent] = field(default_factory=list)
+    selected_nutrition_content: NutritionContent | None = None
+    nutrition_content: NutritionContent | None = None
+    serving_qty: float | None = None
+    is_favorite: bool | None = None
+    type: str | None = None
+
+
+@dataclass
+class CustomMealDetail:
+    custom_meal_id: int | str | None = None
+    name: str | None = None
+    is_favorite: bool | None = None
+    status: int | None = None
+    type: str | None = None
+    foods: list[CustomMealFood] = field(default_factory=list)
+    content_summary: NutritionContent | None = None
+
+
 def _enrich_foods_locale(
     foods: builtins.list[dict[str, Any]],
     client: http.Client,
@@ -45,7 +75,7 @@ class CustomMeal:
         limit: int = 20,
         *,
         client: http.Client | None = None,
-    ) -> list[CustomMealItem]:
+    ) -> CustomMealList:
         import garth
 
         client = client or garth.client
@@ -59,10 +89,14 @@ class CustomMeal:
             "/nutrition-service/customMeal", params=params
         )
         assert isinstance(data, dict)
-        return [
+        items = [
             CustomMealItem(**camel_to_snake_dict(c))
             for c in data.get("customMeals", [])
         ]
+        return CustomMealList(
+            items=items,
+            has_more=data.get("hasMore", False),
+        )
 
     @staticmethod
     def create(
@@ -70,7 +104,7 @@ class CustomMeal:
         foods: builtins.list[dict[str, Any]],
         *,
         client: http.Client | None = None,
-    ) -> dict[str, Any]:
+    ) -> CustomMealDetail:
         import garth
 
         client = client or garth.client
@@ -92,7 +126,7 @@ class CustomMeal:
             "/nutrition-service/customMeal", method="PUT", json=body
         )
         assert isinstance(data, dict)
-        return data
+        return CustomMealDetail(**camel_to_snake_dict(data))
 
     @staticmethod
     def update(
@@ -101,7 +135,7 @@ class CustomMeal:
         foods: builtins.list[dict[str, Any]],
         *,
         client: http.Client | None = None,
-    ) -> dict[str, Any]:
+    ) -> CustomMealDetail:
         import garth
 
         client = client or garth.client
@@ -123,7 +157,7 @@ class CustomMeal:
             "/nutrition-service/customMeal", method="PUT", json=body
         )
         assert isinstance(data, dict)
-        return data
+        return CustomMealDetail(**camel_to_snake_dict(data))
 
     @staticmethod
     def delete(
